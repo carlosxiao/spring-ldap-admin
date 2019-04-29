@@ -1,0 +1,12 @@
+spring:
+  ldap:
+    embedded:
+      ldif: classpath:ldap-server.ldif
+      base-dn: dc=example,dc=com
+#    urls: ldap://127.0.0.1:18880
+#    username: uid=admin,ou=system
+#    password: secret
+#    base: base=dc=example,dc=com
+#    clean: true
+#    directory:
+#      type: NORMAL

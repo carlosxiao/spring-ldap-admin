@@ -16,14 +16,16 @@
 
 package com.cc.ldap.domain;
 
-import org.springframework.data.ldap.repository.LdapRepository;
+import org.springframework.data.repository.CrudRepository;
 
+import javax.naming.Name;
 import java.util.List;
 
 /**
  * @author Mattias Hellborg Arthursson
  */
-public interface UserRepo extends LdapRepository<User> {
+public interface UserRepo extends CrudRepository<User, Name> {
     User findByEmployeeNumber(int employeeNumber);
+
     List<User> findByFullNameContains(String name);
 }

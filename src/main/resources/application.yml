@@ -2,9 +2,10 @@ server:
   port: 9000
 spring:
   ldap:
-    embedded:
-      ldif: ldap-server.ldif
-      base-dn: dc=didispace,dc=com
+    urls: ldap://172.31.18.12:389
+    username: cn=admin,dc=yb-inc,dc=com
+    password: 97TcSeEfx4SYYf54
+    base: dc=yb-inc,dc=com
   datasource:
     url: jdbc:mysql://10.8.78.188:3306/historic?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
     username: root

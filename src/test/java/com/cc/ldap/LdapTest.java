@@ -1,6 +1,8 @@
 package com.cc.ldap;
 
-import com.cc.ldap.domain.PersonRepository;
+import com.cc.ldap.domain.User;
+import com.cc.ldap.domain.UserRepo;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,13 +19,12 @@ import javax.annotation.Resource;
 public class LdapTest {
 
     @Resource
-    private PersonRepository personRepository;
+    private UserRepo userRepo;
 
 
     @Test
-    public void findAll() throws Exception {
-        personRepository.findAll().forEach(p -> {
-            System.out.println(p);
-        });
+    public void findAll() {
+        Iterable<User> all = userRepo.findAll();
+        all.forEach(p -> System.out.println(p));
     }
 }

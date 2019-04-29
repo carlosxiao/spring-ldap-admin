@@ -19,13 +19,13 @@ package com.cc.ldap.service;
 import com.cc.ldap.domain.*;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.support.BaseLdapNameAware;
-import org.springframework.ldap.query.LdapQueryBuilder;
 import org.springframework.ldap.support.LdapNameBuilder;
 import org.springframework.ldap.support.LdapUtils;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.naming.Name;
 import javax.naming.ldap.LdapName;
 import java.util.Collection;
@@ -35,8 +35,11 @@ import java.util.Set;
 /**
  * @author Mattias Hellborg Arthursson
  */
+@Service
 public class UserService implements BaseLdapNameAware {
+    @Resource
     private final UserRepo userRepo;
+    @Resource
     private final GroupRepo groupRepo;
     private LdapName baseLdapPath;
     private DirectoryType directoryType;
@@ -65,7 +68,7 @@ public class UserService implements BaseLdapNameAware {
     }
 
     public User findUser(String userId) {
-        return userRepo.findOne(LdapUtils.newLdapName(userId));
+        return new User();//return userRepo.findOne(LdapUtils.newLdapName(userId));
     }
 
     public User createUser(User user) {
@@ -94,9 +97,8 @@ public class UserService implements BaseLdapNameAware {
      * @return
      */
     public Set<User> findAllMembers(Iterable<Name> absoluteIds) {
-        userRepo.findAll();
-        LdapQueryBuilder.query().where("")
-        return Sets.newLinkedHashSet(userRepo.findAll(toRelativeIds(absoluteIds)));
+        //return Sets.newLinkedHashSet(userRepo.findAll(toRelativeIds(absoluteIds)));
+        return null;
     }
 
     public Iterable<Name> toRelativeIds(Iterable<Name> absoluteIds) {
@@ -110,7 +112,7 @@ public class UserService implements BaseLdapNameAware {
 
     public User updateUser(String userId, User user) {
         LdapName originalId = LdapUtils.newLdapName(userId);
-        User existingUser = userRepo.findOne(originalId);
+        User existingUser = new User();//userRepo.findOne(originalId);
 
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
@@ -132,15 +134,14 @@ public class UserService implements BaseLdapNameAware {
     /**
      * Update the user and - if its id changed - update all group references to the user.
      *
-     * @param originalId the original id of the user.
+     * @param originalId   the original id of the user.
      * @param existingUser the user, populated with new data
-     *
      * @return the updated entry
      */
     private User updateUserStandard(LdapName originalId, User existingUser) {
         User savedUser = userRepo.save(existingUser);
 
-        if(!originalId.equals(savedUser.getId())) {
+        if (!originalId.equals(savedUser.getId())) {
             // The user has moved - we need to update group references.
             LdapName oldMemberDn = toAbsoluteDn(originalId);
             LdapName newMemberDn = toAbsoluteDn(savedUser.getId());
@@ -156,15 +157,14 @@ public class UserService implements BaseLdapNameAware {
      * because AD clears group membership for removed entries, which means that once the user is
      * update we've lost track of which groups the user was originally member of, preventing us to
      * update the membership references so that they point to the new DN of the user.
-     *
+     * <p>
      * This is slightly less efficient, since we need to get the group membership for all updates
      * even though the user may not have been moved. Using our knowledge of which attributes are
      * part of the distinguished name we can do this more efficiently if we are implementing specifically
      * for Active Directory - this approach is just to highlight this quite significant difference.
      *
-     * @param originalId the original id of the user.
+     * @param originalId   the original id of the user.
      * @param existingUser the user, populated with new data
-     *
      * @return the updated entry
      */
     private User updateUserAd(LdapName originalId, User existingUser) {
@@ -174,7 +174,7 @@ public class UserService implements BaseLdapNameAware {
         User savedUser = userRepo.save(existingUser);
         LdapName newMemberDn = toAbsoluteDn(savedUser.getId());
 
-        if(!originalId.equals(savedUser.getId())) {
+        if (!originalId.equals(savedUser.getId())) {
             // The user has moved - we need to update group references.
             updateGroupReferences(groups, oldMemberDn, newMemberDn);
         }

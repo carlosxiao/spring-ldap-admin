@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.annotation.Resource;
 import java.util.Set;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
@@ -41,10 +42,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @Controller
 public class GroupController {
 
-    @Autowired
+    @Resource
     private GroupRepo groupRepo;
 
-    @Autowired
+    @Resource
     private UserService userService;
 
     @RequestMapping(value = "/groups", method = GET)
