@@ -1,0 +1,20 @@
+server:
+  port: 9000
+spring:
+  ldap:
+    embedded:
+      ldif: ldap-server.ldif
+      base-dn: dc=didispace,dc=com
+  datasource:
+    url: jdbc:mysql://10.8.78.188:3306/historic?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    username: root
+    password: 123qwe.asd
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 200
+      minimum-idle: 2
+  mvc:
+    view:
+      prefix: classpath:/templates
+      suffix: .jsp
