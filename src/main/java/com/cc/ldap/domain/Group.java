@@ -16,6 +16,7 @@
 
 package com.cc.ldap.domain;
 
+import lombok.Data;
 import org.springframework.ldap.odm.annotations.Attribute;
 import org.springframework.ldap.odm.annotations.DnAttribute;
 import org.springframework.ldap.odm.annotations.Entry;
@@ -28,6 +29,8 @@ import java.util.Set;
 /**
  * @author Mattias Hellborg Arthursson
  */
+
+@Data
 @Entry(objectClasses = {"groupOfNames", "top"}, base = "ou=Groups")
 public final class Group {
     @Id
@@ -42,40 +45,4 @@ public final class Group {
 
     @Attribute(name = "member")
     private Set<Name> members = new HashSet<Name>();
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Set<Name> getMembers() {
-        return  members;
-    }
-
-    public void addMember(Name newMember) {
-        members.add(newMember);
-    }
-
-    public void removeMember(Name member) {
-        members.remove(member);
-    }
-
-    public Name getId() {
-        return id;
-    }
-
-    public void setId(Name id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
